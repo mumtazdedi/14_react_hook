@@ -1,24 +1,41 @@
-import logo from './logo.svg';
+import { React, useState } from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Title from './components/Title';
+import Input from './components/Input';
+import Todo from './components/Todo';
+
 
 function App() {
+  const [todos, setTodos] = useState([]);
+
+  const handleDelete = (id) => {
+    const newTodos = todos.filter(todo => todo.id !== id);
+    setTodos(newTodos);
+    console.log("Success Delete id = " + id)
+  }
+
+  const handleCheck = (id) => {
+    const newTodos = todos.map(todo => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed;
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+    console.log("Success Check id = " + id)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Title />
+      <Input setTodos={setTodos} />
+      {
+        todos.map((todo, index) => {
+          return <Todo key={index} todo={todo} handleDelete={handleDelete} handleCheck={handleCheck} />
+        })
+      }
+    </>
   );
 }
 
